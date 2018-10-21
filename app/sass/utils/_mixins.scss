@@ -1,0 +1,9 @@
+@mixin underline($height: 1px, $width: 100%, $background: $grey) {
+    content: "";
+    display: block;
+    width: $width;
+    height: $height;
+    background: $background;
+    text-align: center;
+    margin: auto;
+}

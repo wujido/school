@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab');
+
+body {
+  background: $body;
+  font-family: "Roboto Slab", sans-serif;
+  font-size: 14px;
+  color: $color;
+  line-height: 1.785;
+}
+
+a {
+  color: $green;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.fill {
+  width: 100%;
+  height: 40px;
+}

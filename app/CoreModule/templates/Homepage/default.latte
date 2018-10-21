@@ -1,0 +1,72 @@
+{block title}
+	Pepik a jeho... Stránka na kterou kouká
+{/block}
+
+{block content}
+<div class="container">
+	<div class="jumbotron border pt-3">
+		<h1>Hrouda</h1>
+		<blockquote class="blockquote">
+			<footer class="blockquote-footer"><cite title="Source Title">Nějaké výtvory o hodinách programování ve 4.ročníku</cite></footer>
+		</blockquote>
+		<p>Použité technologie:</p>
+		<ul>
+			<li>PHP Framework <a href="https://www.nette.org" target="_blank">Nette</a> v2.4</li>
+			<li>
+				Doplňky do Nette
+				<ul>
+					<li>Bootstrap 4 formuláře - <a href="https://github.com/czubehead/bootstrap-4-forms" target="_blank">GitHub</a></li>
+				</ul>
+			</li>
+			<li>Css preprocesor <a href="https://sass-lang.com/" target="_blank">SCSS</a></li>
+			<li>Hezké ikonky <a href="https://fontawesome.com/" target="_blank">Font awesome</a></li>
+			<li>Správa databáze v jednom PHP souboru <a href="https://www.adminer.org/cs/" target="_blank">Adminer</a></li>
+		</ul>
+	</div>
+
+	<div class="card-deck mt-4">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Přístup do databáze</h3>
+			</div>
+			<div class="card-body">
+				<p>Do databáze je možno se dostat pomocí Admineru <a href="{$basePath}/adminer/">zde</a></p>
+				<ul>
+					<li>Pro přístup pomocí admineru je nutno použít uživatele s heslem</li>
+				</ul>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Uživatelé</h3>
+			</div>
+			<div class="card-body">
+				<p>Pro používání editačních funkcí v jednotlivých úkolech je třeba být přihlášen:</p>
+				<ul>
+					<li><a n:href="Sign:in">Přihlásit se</a></li>
+					<li><a n:href="Sign:up">Registrovat</a></li>
+				</ul>
+
+				<p>
+					Pokud používáte moji databázi "hrouda" je k dispozici uživatel
+					<ul>
+						<li>Uživatelské jméno: <strong>wujido</strong></li>
+						<li>Heslo: <strong>Jilemnice1</strong></li>
+					</ul>
+				</p>
+
+			</div>
+		</div>
+	</div>
+	<div class="card mt-4">
+		<div class="card-header">
+			<h3 class="card-title">Úkoly</h3>
+		</div>
+		<div class="card-body">
+			<p>Seznam jednoduchých prográmků, které jsem dělal o hodinách programování</p>
+			<ul>
+				<li>Program na styl <a n:href="Atf:">ATF</a></li>
+			</ul>
+		</div>
+</div>
+{/block}
