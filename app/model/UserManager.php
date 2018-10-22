@@ -15,7 +15,7 @@ final class UserManager implements Nette\Security\IAuthenticator
 
 	const
 		TABLE_NAME = 'users',
-		COLUMN_ID = 'id',
+		COLUMN_ID = 'user_id',
 		COLUMN_NAME = 'username',
 		COLUMN_PASSWORD_HASH = 'password',
 		COLUMN_EMAIL = 'email',

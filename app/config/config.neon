@@ -15,13 +15,6 @@ session:
 	expiration: 14 days
 
 
-database:
-	dsn: 'mysql:host=127.0.0.1;dbname=school'
-	user: wujido
-	password: 6Iv9PmfSzMmNsAqo
-	options:
-		lazy: yes
-
 
 services:
 	- App\Model\UserManager
