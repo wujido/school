@@ -1,0 +1,11 @@
+{block content}
+<h1>{$task->ref('atf_lesson', 'lesson_id')->name}</h1>
+<h3>Úloha: {$task->order} ({$task->name})</h3>
+<p>Opište tento text:</p>
+<div class="task-form">
+    {control taskForm}
+    <p class="wrong" n:if="isset($wrong)">{$wrong|noescape}</p>
+</div>
+<script>
+    autosize($('textarea'));
+</script>

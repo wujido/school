@@ -21,4 +21,5 @@ services:
 	- App\Forms\FormFactory
 	- App\Forms\SignInFormFactory
 	- App\Forms\SignUpFormFactory
+	- App\Model\TaskManager
 	router: App\RouterFactory::createRouter

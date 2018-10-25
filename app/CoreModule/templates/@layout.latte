@@ -4,16 +4,6 @@
  *}
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-
-	<title>{ifset title}{include title|stripHtml} | {/ifset}Hrouda</title>
-
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="{$basePath}/css/master.css">
-	{block head}{/block}
-</head>
-
 <body>
 <nav class="navbar navbar-expand navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
 	<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
@@ -37,28 +27,41 @@
 
 <div class="fill"></div>
 
-<div n:foreach="$flashes as $flash" n:class="alert, alert-dismissible, fade, show, flash, $flash->type" role="alert">
+<div n:foreach="$flashes as $flash" n:class="alert, alert-dismissible, fade, show, flash, alert-success, $flash->type" role="alert">
 	{$flash->message}
 	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 		<span aria-hidden="true">&times;</span>
 	</button>
 </div>
 
+<div class="container mt-4">
 	{include content}
+</div>
 
 
 <div n:if="!$presenter->isLinkCurrent('Homepage:default')" class="card mt-4">
 	<div class="card-body">
-		<a n:href="Homepage:"><i class="fas fa-arrow-left"></i> Zpět</a>
+		<a n:href="Homepage:"><i class="fas fa-arrow-left"></i> Home</a>
 	</div>
 </div>
 
 
-	{block scripts}
+{block scripts}
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
 	<script src="{$basePath}/js/bootstrap/bootstrap.min.js"></script>
 	<script src="{$basePath}/js/main.js"></script>
-	{/block}
+	<script src="{$basePath}/js/autosize.min.js"></script>
+{/block}
 </body>
+
+<head>
+	<meta charset="utf-8">
+
+	<title>{ifset title}{include title|stripHtml} | {/ifset}Hrouda</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="{$basePath}/css/master.css">
+	{block head}{/block}
+</head>
 </html>

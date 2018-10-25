@@ -1,2 +1,20 @@
 {block content}
-    <h1>ATF</h1>
+
+
+<ul n:foreach="$lessons as $name => $lesson">
+    <li>
+        {$name}. lekce <span n:if="!empty($lesson[0]->name)">({$lesson[0]->name})</span>
+        <ul>
+            {foreach $lesson as $order => $task}
+                {if $order == 0}
+                    {php continue}
+                {/if}
+                <li>
+                <a n:href="Atf:task $lesson[0]->lesson_id, $order">
+                    Uloha: {$order} <span n:if="!empty($task->name)">({$task->name})</span>
+                </a>
+            </li>
+            {/foreach}
+        </ul>
+    </li>
+</ul>
