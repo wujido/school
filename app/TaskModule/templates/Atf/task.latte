@@ -3,9 +3,10 @@
 <h3>Úloha: {$task->order} ({$task->name})</h3>
 <p>Opište tento text:</p>
 <div class="task-form">
+    <p class="wrong p-0 m-0" n:if="isset($wrong)">{$wrong|noescape}</p>
     {control taskForm}
-    <p class="wrong" n:if="isset($wrong)">{$wrong|noescape}</p>
 </div>
+<a n:href="Atf:default">Atf</a>
 <script>
     autosize($('textarea'));
 </script>

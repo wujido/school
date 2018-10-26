@@ -60,4 +60,17 @@ class TaskManager extends BaseManager
 			return true;
 		return false;
 	}
+
+	public function addLesson($values)
+	{
+		$this->database->table(self::LESSON_TABLE)
+			->insert($values);
+	}
+
+	public function updateLesson($id, $values)
+	{
+		$this->database->table(self::LESSON_TABLE)
+			->where('lesson_id', $id)
+			->update($values);
+	}
 }

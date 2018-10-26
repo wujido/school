@@ -1,9 +1,10 @@
 {block content}
 
-
+<a n:if="$user->loggedIn" n:href="Atf:addLesson">Přidat lekci</a>
 <ul n:foreach="$lessons as $name => $lesson">
     <li>
         {$name}. lekce <span n:if="!empty($lesson[0]->name)">({$lesson[0]->name})</span>
+        <span n:if="$user->loggedIn"> - <a  n:href="Atf:editLesson $name">Upravit</a></span>
         <ul>
             {foreach $lesson as $order => $task}
                 {if $order == 0}
@@ -13,6 +14,10 @@
                 <a n:href="Atf:task $lesson[0]->lesson_id, $order">
                     Uloha: {$order} <span n:if="!empty($task->name)">({$task->name})</span>
                 </a>
+                    <span n:if="$user->loggedIn"> -
+                        <a  n:href="Atf:editLesson $order">Upravit</a>,
+                        <a  n:href="Atf:addTask">Přidat úlohu</a>
+                    </span>
             </li>
             {/foreach}
         </ul>

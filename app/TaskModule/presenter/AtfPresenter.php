@@ -12,6 +12,7 @@ namespace App\Presenters;
 use App\Model\TaskManager;
 use Czubehead\BootstrapForms\BootstrapForm;
 use Nette\Forms\Form;
+use stdClass;
 
 class AtfPresenter extends BasePresenter
 {
@@ -36,6 +37,20 @@ class AtfPresenter extends BasePresenter
 		$this->template->task = $this->taskManager->getTask($lesson, $order);
 	}
 
+	public function renderEditLesson($id)
+	{
+		$lesson = $this->taskManager->getLesson($id);
+		if (!$lesson) {
+			$this->error('Lekce nebyla nalezena');
+		}
+		$this['editLessonForm']->setDefaults($lesson->toArray());
+	}
+
+	public function renderEditTask($id)
+	{
+
+	}
+
 	public function createComponentTaskForm()
 	{
 		$content = $this->taskManager->getTask(
@@ -52,7 +67,7 @@ class AtfPresenter extends BasePresenter
 		return $form;
 	}
 
-	public function taskFomSuccessed(BootstrapForm $form, \stdClass $values)
+	public function taskFomSuccessed(BootstrapForm $form, stdClass $values)
 	{
 		$lesson = $this->getParameter('lesson');
 		$order   = $this->getParameter('order');
@@ -82,8 +97,37 @@ class AtfPresenter extends BasePresenter
 				else
 					$wrong .= $char;
 			}
+//			$form->components['answer']->caption;
 			$this->template->wrong = $wrong;
 		}
 	}
+
+
+	protected function createComponentEditLessonForm()
+	{
+		$form = new BootstrapForm();
+		$form->addText('name', 'Jméno lekce:');
+		$form->addSubmit('save', 'Uložit');
+		$form->onSuccess[] = [$this, 'editLessonFormSucceeded'];
+		
+		return $form;
+	}
+
+	public function editLessonFormSucceeded(Form $form, stdClass $values)
+	{
+		$id = $this->getParameter('id');
+		$this->flashMessage($id);
+
+		if ($id) {
+			$this->taskManager->updateLesson($id, $values);
+			$this->flashMessage('Lekce byla úspěšně uložena');
+		} else {
+			$this->taskManager->addLesson($values);
+			$this->flashMessage('Lekce byla úspěšně ');
+
+		}
+		$this->redirect('Atf:');
+	}
+	
 
 }
