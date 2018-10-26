@@ -50,6 +50,13 @@ class TaskManager extends BaseManager
 		return $return;
 	}
 
+	public function getMaxTask($lesson)
+	{
+		return $this->database->table(self::TASK_TABLE)
+			->where('lesson_id', $lesson)
+			->max('order');
+	}
+
 	public function taskExist($lesson, $order)
 	{
 		$count = $this->database->table(self::TASK_TABLE)

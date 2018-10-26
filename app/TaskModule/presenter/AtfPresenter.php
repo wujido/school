@@ -35,6 +35,47 @@ class AtfPresenter extends BasePresenter
 	public function renderTask($lesson, $order)
 	{
 		$this->template->task = $this->taskManager->getTask($lesson, $order);
+
+		if ($this->taskManager->taskExist($lesson, $order + 1))
+			$next = [
+				'lesson' => $lesson,
+				'task'   => $order + 1,
+				'title'  => 'Další úloha'
+			];
+		else if ($this->taskManager->taskExist($lesson + 1, 1))
+			$next = [
+				'lesson' => $lesson + 1,
+				'task'   => 1,
+				'title'  => 'Další lekce'
+			];
+		else
+			$next = [
+				'lesson' => '',
+				'task'   => '',
+				'title'  => ''
+			];
+
+		if ($this->taskManager->taskExist($lesson, $order - 1))
+			$prev = [
+				'lesson' => $lesson,
+				'task'   => $order - 1,
+				'title'  => 'Předchozí úloha'
+			];
+		else if ($this->taskManager->taskExist($lesson - 1, $this->taskManager->getMaxTask($lesson - 1)))
+			$prev = [
+				'lesson' => $lesson - 1,
+				'task'   => $this->taskManager->getMaxTask($lesson - 1),
+				'title'  => 'Předchozí lekce'
+			];
+		else
+			$prev = [
+				'lesson' => '',
+				'task'   => '',
+				'title'  => ''
+			];
+
+		$this->template->next = $next;
+		$this->template->prev = $prev;
 	}
 
 	public function renderEditLesson($id)
@@ -70,7 +111,7 @@ class AtfPresenter extends BasePresenter
 	public function taskFomSuccessed(BootstrapForm $form, stdClass $values)
 	{
 		$lesson = $this->getParameter('lesson');
-		$order   = $this->getParameter('order');
+		$order  = $this->getParameter('order');
 
 		$content = $this->taskManager->getTask(
 			$lesson,
@@ -82,23 +123,38 @@ class AtfPresenter extends BasePresenter
 				$this->redirect('Atf:task', $lesson, $order + 1);
 			else
 				$id = $this->taskManager->getLesson($lesson)->lesson_id;
-				$this->flashMessage("$id. lekce úspěšně dokončena");
-				$this->redirect('Atf:');
+			$this->flashMessage("$id. lekce úspěšně dokončena");
+			$this->redirect('Atf:');
 		} else {
-			$content = str_split($content);
-			$answer = str_split($values['answer']);
-			$wrong = '';
-			foreach ($content as $i => $char) {
-				if (!isset($answer[$i]))
-					$answer[$i] = '';
+			$contentLen = mb_strlen($content);
+			$stats      = [
+				'mistakes' => 0,
+				'chars'    => $contentLen,
+			];
+			$answer     = $values['answer'];
+			$answerLen  = mb_strlen($answer);
 
-				if ($answer[$i] != $char)
-					$wrong .= "<span class=\"text-danger\">$content[$i]</span>";
-				else
-					$wrong .= $char;
+			if ($answerLen < $contentLen)
+				$stats['mistakes'] = $contentLen - $answerLen;
+
+			$wrong   = '';
+			if (!empty($answer)) {
+				$content = str_split($content);
+				$answer  = str_split($answer);
+				foreach ($answer as $i => $char) {
+					if (!isset($content[$i]))
+						$content[$i] = null;
+
+					if ($content[$i] != $char) {
+						$wrong .= "<span class=\"text-danger\">$char</span>";
+						$stats['mistakes']++;
+					} else
+						$wrong .= $char;
+				}
 			}
-//			$form->components['answer']->caption;
+
 			$this->template->wrong = $wrong;
+			$this->template->stats = $stats;
 		}
 	}
 
@@ -109,7 +165,7 @@ class AtfPresenter extends BasePresenter
 		$form->addText('name', 'Jméno lekce:');
 		$form->addSubmit('save', 'Uložit');
 		$form->onSuccess[] = [$this, 'editLessonFormSucceeded'];
-		
+
 		return $form;
 	}
 
@@ -128,6 +184,6 @@ class AtfPresenter extends BasePresenter
 		}
 		$this->redirect('Atf:');
 	}
-	
+
 
 }

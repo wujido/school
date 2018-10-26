@@ -1,6 +1,8 @@
 log/*
 temp/*
-!.gitignore
+.gitignore
 !.htaccess
-!web.config
+web.config
 app/config/config.local.neon
+.idea/*
+bs-config.js
