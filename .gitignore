@@ -5,4 +5,4 @@ temp/*
 web.config
 app/config/config.local.neon
 .idea/
-bs-config.js
+bs-config.js.idea
