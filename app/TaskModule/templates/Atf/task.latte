@@ -20,7 +20,7 @@
         </tr>
         <tr>
             <th scope="row">Úspěšnost</th>
-            <td>{100-($stats['mistakes']/$stats['chars'])*100}%</td>
+            <td>{round(100-($stats['mistakes']/$stats['chars'])*100, 2)}%</td>
         </tr>
         </tbody>
     </table>

@@ -21,6 +21,14 @@ class AtfPresenter extends BasePresenter
 	 */
 	private $taskManager;
 
+	const NEXT_TASK_TITLE = 'Další úloha';
+	const NEXT_LESSON_TITLE = 'Další lekce';
+	const PREV_TASK_TITLE = 'Předchozí úloha';
+	const PREV_LESSON_TITLE = 'Předchozí lekce';
+
+	const LESSON_NOT_FOUND = 'Lekce nebyla nalezena';
+	const TASK_NOT_FOUND = 'Úloha nebyla nalezena';
+
 	public function __construct(TaskManager $taskManager)
 	{
 
@@ -40,13 +48,13 @@ class AtfPresenter extends BasePresenter
 			$next = [
 				'lesson' => $lesson,
 				'task'   => $order + 1,
-				'title'  => 'Další úloha'
+				'title'  => self::NEXT_TASK_TITLE
 			];
 		else if ($this->taskManager->taskExist($lesson + 1, 1))
 			$next = [
 				'lesson' => $lesson + 1,
 				'task'   => 1,
-				'title'  => 'Další lekce'
+				'title'  => self::NEXT_LESSON_TITLE
 			];
 		else
 			$next = [
@@ -59,13 +67,13 @@ class AtfPresenter extends BasePresenter
 			$prev = [
 				'lesson' => $lesson,
 				'task'   => $order - 1,
-				'title'  => 'Předchozí úloha'
+				'title'  => self::PREV_TASK_TITLE
 			];
 		else if ($this->taskManager->taskExist($lesson - 1, $this->taskManager->getMaxTask($lesson - 1)))
 			$prev = [
 				'lesson' => $lesson - 1,
 				'task'   => $this->taskManager->getMaxTask($lesson - 1),
-				'title'  => 'Předchozí lekce'
+				'title'  => self::PREV_LESSON_TITLE
 			];
 		else
 			$prev = [
@@ -82,14 +90,23 @@ class AtfPresenter extends BasePresenter
 	{
 		$lesson = $this->taskManager->getLesson($id);
 		if (!$lesson) {
-			$this->error('Lekce nebyla nalezena');
+			$this->error(self::LESSON_NOT_FOUND);
 		}
 		$this['editLessonForm']->setDefaults($lesson->toArray());
 	}
 
 	public function renderEditTask($id)
 	{
+		$task = $this->taskManager->getTaskById($id);
+		if (!$task) {
+			$this->error(self::TASK_NOT_FOUND);
+		}
+		$this['editTaskForm']->setDefaults($task->toArray());
+	}
 
+	public function renderAddTask($lesson, $order)
+	{
+		
 	}
 
 	public function createComponentTaskForm()
@@ -139,13 +156,23 @@ class AtfPresenter extends BasePresenter
 
 			$wrong   = '';
 			if (!empty($answer)) {
-				$content = str_split($content);
-				$answer  = str_split($answer);
-				foreach ($answer as $i => $char) {
-					if (!isset($content[$i]))
-						$content[$i] = null;
+				$content = preg_split('//u', $content, -1, PREG_SPLIT_NO_EMPTY);
+				$answer  = preg_split('//u', $answer, -1, PREG_SPLIT_NO_EMPTY);
 
-					if ($content[$i] != $char) {
+				if (count($content) > count($answer)) {
+					$cycle = $content;
+					$control = $answer;
+				}
+				else {
+					$cycle = $answer;
+					$control = $content;
+				}
+
+				foreach ($cycle as $i => $char) {
+					if (!isset($control[$i]))
+						$control[$i] = null;
+
+					if ($control[$i] != $char) {
 						$wrong .= "<span class=\"text-danger\">$char</span>";
 						$stats['mistakes']++;
 					} else
@@ -164,26 +191,79 @@ class AtfPresenter extends BasePresenter
 		$form = new BootstrapForm();
 		$form->addText('name', 'Jméno lekce:');
 		$form->addSubmit('save', 'Uložit');
-		$form->onSuccess[] = [$this, 'editLessonFormSucceeded'];
+		$form->onSuccess[] = [$this, 'editLessonFormSuccessed'];
 
 		return $form;
 	}
 
-	public function editLessonFormSucceeded(Form $form, stdClass $values)
+	public function editLessonFormSuccessed(BootstrapForm $form, stdClass $values)
 	{
 		$id = $this->getParameter('id');
-		$this->flashMessage($id);
 
 		if ($id) {
 			$this->taskManager->updateLesson($id, $values);
 			$this->flashMessage('Lekce byla úspěšně uložena');
 		} else {
 			$this->taskManager->addLesson($values);
-			$this->flashMessage('Lekce byla úspěšně ');
+			$this->flashMessage('Lekce byla úspěšně přidána');
 
 		}
 		$this->redirect('Atf:');
 	}
 
+	public function createComponentEditTaskForm()
+	{
+		$id = $this->getParameter('lesson');
+
+
+
+
+		if ($id) {
+			$tasks = $this->taskManager->getLessonOrder($id);
+			$i         = end($tasks) + 1;
+			$tasks[$i] = $i;
+			$tasks = array_diff($tasks, [0]);
+			$lessons = [$id => $id];
+		}
+	else {
+		$tasks     = $this->taskManager->getLessonOrder();
+
+			$lessons = $this->taskManager->getLessons();
+
+			foreach ($lessons as $name => $lesson) {
+				$lessons[$name] = $name;
+			}
+		}
+
+
+
+		$form = new BootstrapForm();
+		$form->addText('name', 'Jméno');
+		$form->addTextArea('content', 'Obsah');
+		$form->addSelect('lesson_id', 'Lekce', $lessons);
+		$form->addSelect('order', 'Pořadí v lekci', $tasks);
+
+		$form->addSubmit('save', 'Uložit');
+
+		$form->onSuccess[] = [$this, 'editTaskFormSuccessed'];
+
+		return $form;
+	}
+
+	public function editTaskFormSuccessed(BootstrapForm $form, stdClass $values)
+	{
+		$id = $this->getParameter('id');
+
+		if ($id) {
+			$this->taskManager->updateTask($id, $values);
+			$this->taskManager->saveOrder(taskManager::TASK_TABLE, $values->order, $id, 'lesson_id', $id);
+			$this->flashMessage('Úloha byla úspěšně uložena');
+		} else {
+			$this->taskManager->addTask($values);
+			$this->flashMessage('Úloha byla úspěšně přidána');
+		}
+
+		$this->redirect('Atf:');
+	}
 
 }

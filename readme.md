@@ -3,7 +3,7 @@ Tasks maked in school
 Some creations of programming hours in the 4th school year
 
 ### Used technology
-- Php framewort [Nette](https://github.com/nette/nette) 
+- Php framework [Nette](https://github.com/nette/nette) 
 -  Nette addons
     - Bootstrap 4 forms - [GitHub](https://github.com/czubehead/bootstrap-4-forms)
 - [Sass](https://sass-lang.com/) for styling
