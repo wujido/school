@@ -119,7 +119,8 @@ class AtfPresenter extends BasePresenter
 		)->content;
 
 		$form = new BootstrapForm();
-		$form->addTextArea('answer', $content);
+		$form->addText('answer', $content)
+			->setRequired('Vyplň prosím obsah úlohy');
 		$form->addSubmit('check', 'Zkontrolovat');
 
 		$form->onSuccess[] = [$this, 'taskFomSuccessed'];
@@ -153,8 +154,8 @@ class AtfPresenter extends BasePresenter
 			$answer     = $values['answer'];
 			$answerLen  = mb_strlen($answer);
 
-			if ($answerLen < $contentLen)
-				$stats['mistakes'] = $contentLen - $answerLen;
+//			if ($answerLen < $contentLen)
+//				$stats['mistakes'] = $contentLen - $answerLen;
 
 			$wrong   = '';
 			if (!empty($answer)) {
