@@ -4,6 +4,17 @@
  *}
 <!DOCTYPE html>
 <html>
+<head>
+	<meta charset="utf-8">
+
+	<title>{ifset title}{include title|stripHtml} | {/ifset}Hrouda</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="{$basePath}/css/master.css">
+	{block head}{/block}
+</head>
 <body>
 <nav class="navbar navbar-expand navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
 	<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
@@ -55,13 +66,4 @@
 {/block}
 </body>
 
-<head>
-	<meta charset="utf-8">
-
-	<title>{ifset title}{include title|stripHtml} | {/ifset}Hrouda</title>
-
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="{$basePath}/css/master.css">
-	{block head}{/block}
-</head>
 </html>
