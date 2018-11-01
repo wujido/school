@@ -102,6 +102,8 @@ class AtfPresenter extends BasePresenter
 			$this->error(self::TASK_NOT_FOUND);
 		}
 		$this['editTaskForm']->setDefaults($task->toArray());
+
+//		$this->taskManager->saveOrder(taskManager::TASK_TABLE, 1, $id, 'lesson_id', 1);
 	}
 
 	public function renderAddTask($lesson, $order)
@@ -255,8 +257,9 @@ class AtfPresenter extends BasePresenter
 		$id = $this->getParameter('id');
 
 		if ($id) {
+			$this->taskManager->saveOrder(taskManager::TASK_TABLE, $values->order, $id, 'lesson_id', $values->lesson_id);
+			unset($values['order']);
 			$this->taskManager->updateTask($id, $values);
-			$this->taskManager->saveOrder(taskManager::TASK_TABLE, $values->order, $id, 'lesson_id', $id);
 			$this->flashMessage('Úloha byla úspěšně uložena');
 		} else {
 			$this->taskManager->addTask($values);

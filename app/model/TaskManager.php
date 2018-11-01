@@ -116,31 +116,41 @@ class TaskManager extends BaseManager
 			$all[] = $item->task_id;
 		}
 
-
-//		return $all;
+//		dump($all);
 
 		$was = true;
-		for ($i = 0; $i <= count($all); $i++) {
+		for ($i = 0; $i <= count($all) + 1; $i++) {
+//			dump('i = ' . $i);
 			if (isset($all[$i])) {
-				if ($all[$i] < $order && $was) {
+				if ($i + 1 < $order && $was) {
 					$finalOrder[$i] = $all[$i];
-				} else if ($all[$i] == $order) {
-					$finalOrder[$i + 1] = $taskId;
-					$finalOrder[$i] = $all[$i];
+//					dump(1);
+				} else if ($i + 1 == $order) {
+//					dump( $i + 1 . ' =');
+					$finalOrder[$i] = (integer) $taskId;
+					$finalOrder[$i + 1] = $all[$i];
 					$i++;
 					$was = false;
+//					dump(2);
 				} else if (!$was) {
-					$finalOrder[$i] = $all[$i - 1];
+					$finalOrder[$i] = $all[$i];
+//					dump(3);
 				} else {
 					$finalOrder[$i] = $all[$i];
+//					dump(4);
 				}
+			}else {
+//				dump(5);
 			}
 		}
 
-
+//		dump($finalOrder);
 		foreach ($finalOrder as $order => $id) {
-			$selection->where('task_id', $id)
+			$order++;
+			$static = clone $selection;
+			$static->where('task_id', $id)
 				->update(['order' => $order]);
+//			dump('id ' . $id . ', order ' . $order);
 		}
 	}
 
