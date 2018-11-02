@@ -101,14 +101,17 @@ class AtfPresenter extends BasePresenter
 		if (!$task) {
 			$this->error(self::TASK_NOT_FOUND);
 		}
-		$this['editTaskForm']->setDefaults($task->toArray());
+		$default = $task->toArray();
+		$default['lesson'] = $default['lesson_id'];
+		$default['order_select'] = $default['order'];
+		$this['editTaskForm']->setDefaults($default);
 
 //		$this->taskManager->saveOrder(taskManager::TASK_TABLE, 1, $id, 'lesson_id', 1);
 	}
 
 	public function renderAddTask($lesson, $order)
 	{
-		
+		$this['editTaskForm']->setDefaults(['order' => $order, 'order_select' => $order]);
 	}
 
 	public function createComponentTaskForm()
@@ -219,9 +222,6 @@ class AtfPresenter extends BasePresenter
 	{
 		$id = $this->getParameter('lesson');
 
-
-
-
 		if ($id) {
 			$tasks = $this->taskManager->getLessonOrder($id);
 			$i         = end($tasks) + 1;
@@ -244,8 +244,12 @@ class AtfPresenter extends BasePresenter
 		$form = new BootstrapForm();
 		$form->addText('name', 'Jméno');
 		$form->addTextArea('content', 'Obsah');
-		$form->addSelect('lesson_id', 'Lekce', $lessons);
-		$form->addSelect('order', 'Pořadí v lekci', $tasks);
+		$form->addSelect('lesson', 'Lekce', $lessons)
+			->setDisabled();
+		$form->addHidden('lesson_id');
+		$form->addSelect('order_select', 'Pořadí v lekci', $tasks)
+		->setDisabled();
+		$form->addHidden('order');
 
 		$form->addSubmit('save', 'Uložit');
 
@@ -259,7 +263,7 @@ class AtfPresenter extends BasePresenter
 		$id = $this->getParameter('id');
 
 		if ($id) {
-			$this->taskManager->saveOrder(taskManager::TASK_TABLE, $values->order, $id, 'lesson_id', $values->lesson_id);
+//			$this->taskManager->saveOrder(taskManager::TASK_TABLE, $values->order, $id, 'lesson_id', $values->lesson_id);
 			unset($values['order']);
 			$this->taskManager->updateTask($id, $values);
 			$this->flashMessage('Úloha byla úspěšně uložena');
