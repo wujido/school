@@ -176,7 +176,8 @@ class AtfPresenter extends BasePresenter
 						$control[$i] = null;
 
 					if ($control[$i] != $char) {
-						$wrong .= "<span class=\"text-danger\">$char</span>";
+						$vypustka   = '<span style="font-size: 6px">…</span>';
+						$wrong .= "<span class=\"text-danger\">" . (isset($control[$i]) ? ($control[$i] == ' ') ? $vypustka : $control[$i]  : ($char == ' ') ? $vypustka : $char) . "</span>";
 						$stats['mistakes']++;
 					} else
 						$wrong .= $char;
