@@ -122,8 +122,10 @@ class AtfPresenter extends BasePresenter
 		)->content;
 
 		$form = new BootstrapForm();
-		$form->addText('answer', $content)
-			->setRequired('Vyplň prosím obsah úlohy');
+		$form->addTextArea('answer', $content)
+			->setRequired('Vyplň prosím obsah úlohy')
+			->setHtmlAttribute('autocomplete',"off")
+			->setHtmlAttribute('row',"1");
 		$form->addSubmit('check', 'Zkontrolovat');
 
 		$form->onSuccess[] = [$this, 'taskFomSuccessed'];
@@ -180,7 +182,11 @@ class AtfPresenter extends BasePresenter
 
 					if ($control[$i] != $char) {
 						$vypustka   = '<span style="font-size: 6px">…</span>';
-						$wrong .= "<span class=\"text-danger\">" . (isset($control[$i]) ? ($control[$i] == ' ') ? $vypustka : $control[$i]  : ($char == ' ') ? $vypustka : $char) . "</span>";
+						if (isset($answer[$i]) && ctype_space($answer[$i]))
+							$answer[$i] = $vypustka;
+						if (ctype_space($char))
+							$char = $vypustka;
+						$wrong .= "<span class=\"text-danger\">" . (isset($answer[$i]) ?  $answer[$i]  : $char) . "</span>";
 						$stats['mistakes']++;
 					} else
 						$wrong .= $char;

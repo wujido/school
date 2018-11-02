@@ -8,8 +8,14 @@
     letter-spacing: 2px !important;
   }
 
-  input[name="answer"] {
+  textarea[name="answer"] {
+    height: 40px;
+    line-height: 40px;
     letter-spacing: 2px !important;
+    padding-left: 14px;
+    overflow:hidden;
+    resize: none;
+    padding-top: 0;
   }
 
   .wrong {
