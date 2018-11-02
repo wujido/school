@@ -111,7 +111,11 @@ class AtfPresenter extends BasePresenter
 
 	public function renderAddTask($lesson, $order)
 	{
-		$this['editTaskForm']->setDefaults(['order' => $order, 'order_select' => $order]);
+		$this['editTaskForm']->setDefaults([
+			'order' => $order,
+			'order_select' => $order,
+			'lesson_id' => $lesson
+		]);
 	}
 
 	public function createComponentTaskForm()
