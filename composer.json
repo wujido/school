@@ -1,10 +1,14 @@
 {
-	"name": "nette/sandbox",
-	"description": "The sandbox is a pre-packaged Nette Framework project, basic configured structure for your application.",
-	"homepage": "https://nette.org",
+	"name": "wujido/school",
+	"description": "Some creations of programming hours in the 4th school year",
+	"homepage": "http://school.wujido.cz",
 	"type": "project",
 	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
 	"authors": [
+		{
+			"name": "Václav Horuda",
+			"homepage": "https://wujido.cz"
+		},
 		{
 			"name": "David Grudl",
 			"homepage": "https://davidgrudl.com"

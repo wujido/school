@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee17d2625bfb2558da90e58c644ce52c",
+    "content-hash": "f3bc2a2443a07a4d57a03096e7c6094f",
     "packages": [
         {
             "name": "czubehead/bootstrap-4-forms",
