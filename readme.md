@@ -3,6 +3,7 @@ Tasks maked in school
 Some creations of programming hours in the 4th school year
 
 ###Installation 
+
 The best way is via composer:
 ```cmd
 composer create-project wujido/school
