@@ -5,7 +5,7 @@
         ({$task->ref('atf_lesson', 'lesson_id')->name})
     </span>
 </h1>
-<h3>Úloha: {$task->order} ({$task->name})</h3>
+<h3 n:block="title">Úloha: {$task->order} ({$task->name})</h3>
 <p>Opište tento text:</p>
 <div class="task-form">
     <table class="table table-sm" n:if="isset($stats)">
@@ -29,16 +29,16 @@
 </div>
 <div class="row">
     <div class="col-6">
-        <a n:href="Atf:task $prev['lesson'], $prev['task']" n:if="!empty($prev['title'])">
-            <i class="fas fa-arrow-left"></i> Předchozí úloha
+        <a class="btn btn-secondary btn-sm" role="button" n:href="Atf:task $prev['lesson'], $prev['task']" n:if="!empty($prev['title'])">
+            <i class="fas fa-arrow-left"></i> {$prev['title']}
         </a>
     </div>
     <div class="text-right col-6">
-        <a n:href="Atf:task $next['lesson'], $next['task']" n:if="!empty($next['title'])">
+        <a  class="btn btn-secondary btn-sm" role="button"n:href="Atf:task $next['lesson'], $next['task']" n:if="!empty($next['title'])">
             {$next['title']} <i class="fas fa-arrow-right"></i>
         </a>
     </div>
 </div>
 <div class="row mt-4">
-    <a n:href="Atf:default"><i class="fas fa-arrow-left"></i> Zpět na výběr lekcí</a>
+    <a class="btn btn-secondary btn-sm" role="button" n:href="Atf:default"><i class="fas fa-arrow-left"></i> Zpět na výběr lekcí</a>
 </div>

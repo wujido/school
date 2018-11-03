@@ -130,7 +130,9 @@ class AtfPresenter extends BasePresenter
 			->setRequired('Vyplň prosím obsah úlohy')
 			->setHtmlAttribute('autocomplete',"off")
 			->setHtmlAttribute('row',"1");
-		$form->addSubmit('check', 'Zkontrolovat');
+		$form->addSubmit('check', 'Zkontrolovat')
+			->setHtmlAttribute('class', 'btn btn-success')
+			->setHtmlAttribute('role', 'button');
 
 		$form->onSuccess[] = [$this, 'taskFomSuccessed'];
 
@@ -185,7 +187,7 @@ class AtfPresenter extends BasePresenter
 						$control[$i] = null;
 
 					if ($control[$i] != $char) {
-						$vypustka   = '<span style="font-size: 6px">…</span>';
+						$vypustka   = '<strong>.</strong>';
 						if (isset($answer[$i]) && ctype_space($answer[$i]))
 							$answer[$i] = $vypustka;
 						if (ctype_space($char))

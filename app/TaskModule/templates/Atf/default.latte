@@ -1,28 +1,31 @@
-{block title}
-    All ten fingers
-{/block}
-
 {block content}
-
-<a n:if="$user->loggedIn" n:href="Atf:addLesson">Přidat lekci</a><br>
-<ul n:foreach="$lessons as $name => $lesson">
-    <li>
-        {$name}. lekce <span n:if="!empty($lesson[0]->name)">({$lesson[0]->name})</span>
-        <span n:if="$user->loggedIn"> - <a  n:href="Atf:editLesson $name">Upravit</a>, <a  n:href="Atf:addTask $name, count($lesson)">Přidat úlohu</a></span>
-        <ul>
+<h1 n:block="title">All ten fingers</h1>
+<a class="btn btn-secondary btn-sm mb-2" role="button" n:if="$user->loggedIn" n:href="Atf:addLesson">Přidat lekci</a><br>
+{*<div class="d-flex">*}
+    <div class="card mb-3" n:foreach="$lessons as $name => $lesson">
+        <div class="card-body text-dark">
+            <h5 class="card-title">
+                {$name}. lekce <span n:if="!empty($lesson[0]->name)">({$lesson[0]->name})</span>
+                <span class="float-right" n:if="$user->loggedIn">
+                    <a class="btn btn-secondary btn-sm" role="button" n:href="Atf:editLesson $name">Upravit</a>
+                    <a class="btn btn-secondary btn-sm" role="button" n:href="Atf:addTask $name, count($lesson)">Přidat úlohu</a>
+                </span>
+            </h5>
+        </div>
+        <ul class="list-group list-group-flush">
             {foreach $lesson as $order => $task}
                 {if $order == 0}
                     {php continue}
                 {/if}
-                <li>
-                <a n:href="Atf:task $lesson[0]->lesson_id, $order">
-                    Uloha: {$order} <span n:if="!empty($task->name)">({$task->name})</span>
-                </a>
-                    <span n:if="$user->loggedIn"> -
-                        <a  n:href="Atf:editTask $task->task_id">Upravit</a>
-                    </span>
-            </li>
+                <li class="list-group-item">
+                    <a n:href="Atf:task $lesson[0]->lesson_id, $order">
+                        Uloha: {$order} <span n:if="!empty($task->name)">({$task->name})</span>
+                    </a>
+                    <span n:if="$user->loggedIn">
+                     <a class="btn btn-secondary btn-sm float-right" role="button" n:href="Atf:editTask $task->task_id">Upravit</a>
+                </span>
+                </li>
             {/foreach}
         </ul>
-    </li>
-</ul>
+    </div>
+{*</div>*}
