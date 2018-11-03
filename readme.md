@@ -2,7 +2,7 @@ Tasks maked in school
 =============
 Some creations of programming hours in the 4th school year
 
-###Installation 
+### Installation 
 
 The best way is via composer:
 ```cmd
