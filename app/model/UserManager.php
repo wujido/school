@@ -3,6 +3,9 @@
 namespace App\Model;
 
 use Nette;
+use Nette\Database\Context;
+use Nette\Security\AuthenticationException;
+use Nette\Security\Identity;
 use Nette\Security\Passwords;
 
 
@@ -22,11 +25,11 @@ final class UserManager implements Nette\Security\IAuthenticator
 		COLUMN_ROLE = 'role';
 
 
-	/** @var Nette\Database\Context */
+	/** @var Context */
 	private $database;
 
 
-	public function __construct(Nette\Database\Context $database)
+	public function __construct(Context $database)
 	{
 		$this->database = $database;
 	}
@@ -34,8 +37,8 @@ final class UserManager implements Nette\Security\IAuthenticator
 
 	/**
 	 * Performs an authentication.
-	 * @return Nette\Security\Identity
-	 * @throws Nette\Security\AuthenticationException
+	 * @return Identity
+	 * @throws AuthenticationException
 	 */
 	public function authenticate(array $credentials)
 	{
@@ -46,10 +49,10 @@ final class UserManager implements Nette\Security\IAuthenticator
 			->fetch();
 
 		if (!$row) {
-			throw new Nette\Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
+			throw new AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
 
 		} elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
-			throw new Nette\Security\AuthenticationException('The password is incorrect.', self::INVALID_CREDENTIAL);
+			throw new AuthenticationException('The password is incorrect.', self::INVALID_CREDENTIAL);
 
 		} elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD_HASH])) {
 			$row->update([
@@ -59,7 +62,7 @@ final class UserManager implements Nette\Security\IAuthenticator
 
 		$arr = $row->toArray();
 		unset($arr[self::COLUMN_PASSWORD_HASH]);
-		return new Nette\Security\Identity($row[self::COLUMN_ID], $row[self::COLUMN_ROLE], $arr);
+		return new Identity($row[self::COLUMN_ID], $row[self::COLUMN_ROLE], $arr);
 	}
 
 

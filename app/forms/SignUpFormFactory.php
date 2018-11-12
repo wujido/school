@@ -7,13 +7,14 @@ use Czubehead\BootstrapForms\BootstrapForm;
 use Czubehead\BootstrapForms\Enums\RenderMode;
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Utils\Html;
 
 
 final class SignUpFormFactory
 {
 	use Nette\SmartObject;
 
-	const PASSWORD_MIN_LENGTH = 7;
+	const PASSWORD_MIN_LENGTH = 6;
 
 	/** @var FormFactory */
 	private $factory;
@@ -37,15 +38,32 @@ final class SignUpFormFactory
 		$form = $this->factory->create();
 		$form->renderMode = RenderMode::SideBySideMode;
 		$form->addText('username', 'Zvolte si uživatelské jméno:')
-			->setRequired('Prosím zvolte si uživatelské jméno.');
+			->setRequired('Prosím zvolte si uživatelské jméno.')
+			->addRule(Form::PATTERN, 'Jméno obsahuje zakázané znaky.', '[\p{L}\d]*');
 
-		$form->addEmail('email', 'Váš e-mail:')
-			->setRequired('Prosím vložte váš e-mail.');
+		$form->addText('email', 'Váš e-mail:')
+			->setRequired('Prosím vložte váš e-mail.')
+			->addRule(Form::EMAIL, 'Zadejte prosím emailovou adresu v platném formátu.');
 
 		$form->addPassword('password', 'Zvolte si heslo:')
-			->setOption('description', sprintf('alespoň %d znaků', self::PASSWORD_MIN_LENGTH))
+			->setOption(
+				'description',
+				sprintf('musí obsahovat alespoň:' . (string) Html::el('ul')
+						->addHtml( Html::el('li')->addText('%d znaků'))
+						->addHtml( Html::el('li')->addText('jedno velké písmeno'))
+						->addHtml( Html::el('li')->addText('jedno malé písmeno'))
+						->addHtml( Html::el('li')->addText('jednu číslici')),
+					self::PASSWORD_MIN_LENGTH))
 			->setRequired('Prosím zvolte si heslo.')
-			->addRule($form::MIN_LENGTH, null, self::PASSWORD_MIN_LENGTH);
+			->addRule($form::MIN_LENGTH, 'Heslo musí být dlouhé alespoň %d znaků', self::PASSWORD_MIN_LENGTH)
+			->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno velké písmeno', '.*[\p{Lu}].*')
+			->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jedno malé písmeno', '.*\p{Ll}.*')
+			->addRule(Form::PATTERN, 'Heslo musí obsahovat alespoň jednu číslici', '.*[0-9].*')
+		;
+
+		$form->addPassword('passwordCheck', 'Heslo pro kontrolu:')
+			->setRequired('Prosím zadejte heslo ještě jednou pro kontrolu jestli jsou stejná')
+			->addRule(Form::EQUAL, 'Hesla nejsou stejná', $form['password']);
 
 		$form->addSubmit('send', 'Registrovat');
 
@@ -53,7 +71,7 @@ final class SignUpFormFactory
 			try {
 				$this->userManager->add($values->username, $values->email, $values->password);
 			} catch (Model\DuplicateNameException $e) {
-				$form['username']->addError('Username is already taken.');
+				$form['username']->addError('Uživatel s tímto jménem již existuje.');
 				return;
 			}
 			$onSuccess();
