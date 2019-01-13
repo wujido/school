@@ -32,5 +32,6 @@ class GalleryPresenter extends BasePresenter
 	{
 		$this->template->images =  $this->galleryManager->getImagesByName($name);
 	}
+}
 
 
