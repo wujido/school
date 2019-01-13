@@ -22,4 +22,5 @@ services:
 	- App\Forms\SignInFormFactory
 	- App\Forms\SignUpFormFactory
 	- App\Model\TaskManager
+	- App\Model\GalleryManager
 	router: App\RouterFactory::createRouter

@@ -1,0 +1,7 @@
+{block content}
+    {foreach $images as $file}
+        <a n:href="Gallery:detail $file->getBasename()">
+            <img src="../{$file->getPath()}/{$file->getFilename()}" alt="img" width="100px">
+        </a>
+
+    {/foreach}
