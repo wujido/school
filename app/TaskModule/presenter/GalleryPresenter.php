@@ -7,6 +7,7 @@
 namespace App\Presenters;
 
 
+
 use App\Model\GalleryManager;
 
 class GalleryPresenter extends BasePresenter
@@ -33,4 +34,3 @@ class GalleryPresenter extends BasePresenter
 	}
 
 
-}
