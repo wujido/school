@@ -1,0 +1,22 @@
+{block scripts}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var app5 = new Vue({
+            el: '#app-5',
+            data: {
+                message: 'Hello Vue.js!'
+            },
+            methods: {
+                reverseMessage: function () {
+                    this.message = this.message.split('').reverse().join('')
+                }
+            }
+        })
+    </script>
+{/block}
+{block content}
+<div id="app-5">
+    <p>{{ message }}</p>
+    <input v-model="message"> <br>
+    <button v-on:click="reverseMessage">Reverse Message</button>
+</div>

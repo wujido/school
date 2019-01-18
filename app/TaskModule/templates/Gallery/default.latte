@@ -1,8 +1,18 @@
 {block content}
-    {foreach $images as $file}
-        <a n:href="Gallery:detail $file->getBasename()">
-            <img src="../{$file->getPath()}/{$file->getFilename()}" alt="img" width="100px">
-        </a>
-
-    {/foreach}
+{*{if $user->isLoggedIn()}*}
+    {*<div class="row">*}
+        {*{control createSectionForm}*}
+    {*</div>*}
+{*{/if}*}
+<div class="row">
+    <div style="margin: auto">
+        {foreach $images as $file}
+            <div class="thumnails">
+                <a n:href="Gallery:detail $file->getBasename()">
+                    <img src="../{$file->getPath()}/{$file->getFilename()}" alt="img" width="100px">
+                </a>
+            </div>
+        {/foreach}
+    </div>
+</div>
 

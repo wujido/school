@@ -12,7 +12,7 @@ use Nette\Utils\Finder;
 class GalleryManager extends BaseManager
 {
 
-	const GALLERY_DEFAULT = 'Gallery';
+	const GALLERY_DEFAULT = 'Gallery-source';
 
 	private $masks = ['*.jpg', '*.jpeg', '*.png', '*.gif'];
 
